@@ -45,6 +45,8 @@ $ pip3 install -r requirements.txt
 
 $ python3 lambda_function.py
 
+After the execution of the code is finished the scraping results are
+stored in the file scrapeddata.csv.
 
 # AWS cloud implementation
 
