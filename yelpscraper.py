@@ -116,7 +116,7 @@ def scrape(scrapeinfo:dict, starttime, scrapetime):
 
         end = time.time()
         interval = end - starttime
-        if interval > scrapetime:
+        if interval >= scrapetime:
             return totreviews, totdates
 
         # wait for a random time between 8 and 14 seconds before scraping next page to avoid getting blocked

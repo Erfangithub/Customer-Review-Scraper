@@ -4,6 +4,9 @@ from datetime import datetime, timedelta
 
 
 def get_unscraped_date_range(tablename = 'yelp_richmond-station-toronto'):
+    # This function returns a date range [date1str, date2str] where:
+    # date1str = latest date stored in table tablename + 1 day
+    # date2str = present date - 2 days
 
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(tablename)

@@ -2,78 +2,54 @@ from yelpscraper import scrape
 import pandas as pd
 import time
 
-# maximum scrape time in seconds:
-scrapetime = 840  # Note: AWS Lambda can run for a maximum of 900 seconds. For
-                    # local implementation scrapetime can be set to a desired
-                    # value.
+start = time.time()
 
-start = int(time.time())
+                    ### SET SCRAPING PARAMETERS BELOW ###
 
-# local implementation of Yelp scraper
-impln = 'local'
+scrapetime = 840  # maximum scrape time in seconds
 
-# AWS-Lambda implementation of Yelp scraper
-# impln = 'AWS-Lambda'
-
-
-tablename = 'yelp_richmond-station-toronto'
-
-business_phrase = 'richmond-station-toronto'
-business_phrase = 'panera-bread-toronto'
-
+business_phrase = 'panera-bread-toronto-3' # the phrase of the restaurant business in its yelp website url
+# e.g. One of the branches of Panera Bread restaurants has a Yelp url of:
+# https://www.yelp.ca/biz/panera-bread-toronto-3
 
 # specify whether to scrape based on page range or date range or to scrape all pages:
-# pageordate = 'page' or pageordate = 'date' or pageordate = 'allpages'
-pageordate = 'date'
+scrapemode = 'date'
+# scrapemode = 'page' or scrapemode = 'date' or scrapemode = 'allpages'
+
+# date range to scrape
+daterange = ['2018/01/15', '2022/01/15']  # ['yyyy/mm/dd', 'yyyy/mm/dd']
+
+# page range to scrape
+pagerange = [0, 1] # [initialpage , finalpage]
+
+# local or AWS-Lambda implementation of Yelp scraper
+impln = 'local'
+# impln = 'local' or impln = 'AWS-Lambda'
+
+# SCRAPING PARAMETERS RELATED TO AWS-LAMBDA IMPLEMENTATION:
+
+# table name in dynamodb to store the scraping results
+tablename = 'yelp_panera-bread-toronto-3'
+
+                    ### SET SCRAPING PARAMETERS ABOVE ###
+
+# get_unscraped_date_range returns a date range [date1str, date2str] where:
+# date1str = latest date stored in table tablename + 1 day
+# date2str = present date - 2 days
+if impln == 'AWS-Lambda':
+    from dynamodb_related import get_unscraped_date_range
+    daterange = get_unscraped_date_range(tablename = tablename) # use this daterange if interested in getting
+                                                                # the latest date range of reviews not stored
+                                                                # in tablename
+
+scrapeinfo = {'daterange':daterange, 'pagerange':pagerange,
+'business_phrase':business_phrase, 'scrapemode':scrapemode}
 
 
 def lambda_handler(event, context):
-
-# scrapeinfo arguments guide:
-
-#- daterange = ['yyyy/mm/dd', 'yyyy/mm/dd']
-#- pagerange = [initialpage , finalpage]
-#- scrapemode = 'page' # scrapes reviews based on page range, page = 0,1,2,...
-#               'date' # scrapes reviews based on date range
-#               'allpages' # scrapes reviews for all pages related to the business on Yelp website 
-#- business_phrase = the phrase of the restaurant business in its yelp website url
-# e.g.:
-# scrapeinfo = {'daterange':['2015/01/15', '2016/01/15'], 'pagerange' : [0 , 5],
-# 'business_phrase':'richmond-station-toronto', 'scrapemode' : 'date'}
-
-    # date
-    if pageordate == 'date':
-        
-        # custom date range
-        daterange = ['2015/01/15', '2022/01/15']
-
-        # get_unscraped_date_range returns the latest date range from tabelname that
-        # is not scraped
-        if impln == 'AWS-Lambda':
-            from dynamodb_related import get_unscraped_date_range
-            daterange = get_unscraped_date_range(tablename = tablename)
-
-        scrapeinfo = {'daterange':daterange, 'pagerange' : [0 , 5],
-        'business_phrase':business_phrase, 'scrapemode' : 'date'}
-        
-        revs, dts = scrape(scrapeinfo, start, scrapetime)
     
-    # page
-    if pageordate == 'page':
-
-        scrapeinfo = {'daterange':['2020/08/01', '2021/12/30'], 'pagerange' : [0 , 2],
-        'business_phrase':business_phrase, 'scrapemode' : 'page'}
-
-        revs, dts = scrape(scrapeinfo, start, scrapetime)
-
-    # allpages
-    if pageordate == 'allpages':
-
-        scrapeinfo = {'daterange':['2020/08/01', '2021/12/30'], 'pagerange' : [0 , 10],
-        'business_phrase':business_phrase, 'scrapemode' : 'allpages'}
-
-        revs, dts = scrape(scrapeinfo, start, scrapetime)
-
+    revs, dts = scrape(scrapeinfo, start, scrapetime)
+    
     # store revs and dts in dynamodb table tablename
     if impln == 'AWS-Lambda':
         from dynamodb_related import store_in_dynamodb_table
@@ -94,4 +70,4 @@ if impln == 'local':
     df.to_csv('scrapeddata.csv', index = False)
 
     end = time.time()
-    print(end - start)
+    print("Total code runtime in seconds:",end - start)
