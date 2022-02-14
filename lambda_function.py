@@ -31,15 +31,18 @@ impln = 'local'
 # table name in dynamodb to store the scraping results
 tablename = 'yelp_panera-bread-toronto-3'
 
+# set scrape_latest_reviews to True to scrape latest reviews not stored in table tablename
+scrape_latest_reviews = False
+
                     ### SET SCRAPING PARAMETERS ABOVE ###
 
 # get_unscraped_date_range returns a date range [date1str, date2str] where:
 # date1str = latest date stored in table tablename + 1 day
 # date2str = present date - 2 days
-if impln == 'AWS-Lambda':
+if impln == 'AWS-Lambda' and scrape_latest_reviews:
     from dynamodb_related import get_unscraped_date_range
     daterange = get_unscraped_date_range(tablename = tablename) # use this daterange if interested in getting
-                                                                # the latest date range of reviews not stored
+    scrapemode = 'date'                                         # the latest date range of reviews not stored
                                                                 # in tablename
 
 scrapeinfo = {'daterange':daterange, 'pagerange':pagerange,
