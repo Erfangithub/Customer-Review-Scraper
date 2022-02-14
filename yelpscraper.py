@@ -101,7 +101,7 @@ def scrape(scrapeinfo:dict, starttime, scrapetime):
 
             for review, date in zip(reviews, dates):
                 datef = datetime.strptime(date, '%m/%d/%Y')
-                if (datef >= sdate) and (datef <= edate):
+                if (datef >= sdate) and (datef < edate):
                     revs.append(review)
                     dts.append(date)
             
