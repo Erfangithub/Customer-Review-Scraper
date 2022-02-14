@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 def get_unscraped_date_range(tablename = 'yelp_panera-bread-toronto-3'):
     # This function returns a date range [date1str, date2str] where:
     # date1str = latest date stored in table tablename + 1 day
-    # date2str = present date - 2 days
+    # date2str = present date - 1 day
 
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(tablename)
@@ -28,7 +28,7 @@ def get_unscraped_date_range(tablename = 'yelp_panera-bread-toronto-3'):
 
 # get two days before todays date and store it in date2
     todaydate = datetime.combine(date.today(), datetime.min.time())
-    date2 = todaydate - timedelta(days=2)
+    date2 = todaydate - timedelta(days=1)
 
     
 # the date part of date1 and date2 in string format
