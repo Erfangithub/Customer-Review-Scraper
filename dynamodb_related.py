@@ -3,7 +3,7 @@ from boto3.dynamodb.conditions import Key
 from datetime import datetime, timedelta
 
 
-def get_unscraped_date_range(tablename = 'yelp_richmond-station-toronto'):
+def get_unscraped_date_range(tablename = 'yelp_panera-bread-toronto-3'):
     # This function returns a date range [date1str, date2str] where:
     # date1str = latest date stored in table tablename + 1 day
     # date2str = present date - 2 days
@@ -38,8 +38,11 @@ def get_unscraped_date_range(tablename = 'yelp_richmond-station-toronto'):
     return [date1str, date2str]
 
 
-def store_in_dynamodb_table(revs,dts, tablename = 'yelp_richmond-station-toronto'):
+def store_in_dynamodb_table(revs,dts, tablename = 'yelp_panera-bread-toronto-3'):
 
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table(tablename)
+    
 # get maximum id from table
     resp = table.scan(AttributesToGet=['id'])
     
