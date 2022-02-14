@@ -1,6 +1,6 @@
 import boto3
 from boto3.dynamodb.conditions import Key
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 def get_unscraped_date_range(tablename = 'yelp_panera-bread-toronto-3'):
