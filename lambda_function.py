@@ -51,8 +51,14 @@ scrapeinfo = {'daterange':daterange, 'pagerange':pagerange,
 
 def lambda_handler(event, context):
     
-    revs, dts = scrape(scrapeinfo, start, scrapetime)
+    scr_start = time.time()
     
+    revs, dts = scrape(scrapeinfo, start, scrapetime)
+
+    scr_end = time.time()
+    
+    print('Total scrape time:', scr_end - scr_start)
+        
     # store revs and dts in dynamodb table tablename
     if impln == 'AWS-Lambda':
         from dynamodb_related import store_in_dynamodb_table
