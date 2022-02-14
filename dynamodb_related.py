@@ -26,7 +26,7 @@ def get_unscraped_date_range(tablename = 'yelp_panera-bread-toronto-3'):
 # date1
     date1 = maxdate + timedelta(days=1)
 
-# get two days before todays date and store it in date2
+# store the date of 1 day before present date in date2
     todaydate = datetime.combine(date.today(), datetime.min.time())
     date2 = todaydate - timedelta(days=1)
 
