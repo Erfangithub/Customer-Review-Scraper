@@ -38,7 +38,7 @@ scrape_latest_reviews = False
 
 # get_unscraped_date_range returns a date range [date1str, date2str] where:
 # date1str = latest date stored in table tablename + 1 day
-# date2str = present date - 2 days
+# date2str = present date - 1 day
 if impln == 'AWS-Lambda' and scrape_latest_reviews:
     from dynamodb_related import get_unscraped_date_range
     daterange = get_unscraped_date_range(tablename = tablename) # use this daterange if interested in getting
