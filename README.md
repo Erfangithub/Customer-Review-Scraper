@@ -52,7 +52,10 @@ stored in the file scrapeddata.csv.
 
 The AWS diagram of this web scraper is as follows:
 
+
+
 ![diagram](https://user-images.githubusercontent.com/13424158/156043012-0b63f0e7-d872-42f0-bbbf-85e7ee8c27b2.png)
+
 
 To implement this web scraper on AWS visit the following notion link
 for a step by step guide:
