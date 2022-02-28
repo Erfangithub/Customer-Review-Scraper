@@ -50,5 +50,8 @@ stored in the file scrapeddata.csv.
 
 # AWS cloud implementation
 
+To implement this web scraper on AWS visit the following notion link for
+a step by step guide:
 
+https://erfan-shalchian.notion.site/Web-Scraping-Engine-for-Collecting-Customer-Review-Data-from-Yelp-475e314412934094bc66e3e42b645243
 
